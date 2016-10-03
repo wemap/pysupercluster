@@ -67,6 +67,9 @@ SuperCluster::SuperCluster(const std::vector<Point> &points)
         printf("z%d: %ld clusters in %ldms\n", z, clusters.size(), std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
     }
 
+    // index top-level clusters
+    trees[minZoom] = new ClusterTree(clusters);
+
     auto elapsed = std::chrono::steady_clock::now() - start;
     printf("total time: %ldms\n", std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
 }
@@ -124,10 +127,10 @@ std::vector<Cluster*> SuperCluster::cluster(const std::vector<Cluster*> &points,
 
 std::vector<Cluster*> SuperCluster::getClusters(const Point &min_p, const Point &max_p, int zoom) const
 {
-    const int z = std::max(minZoom, std::min(zoom, maxZoom));
+    const int z = std::max(minZoom, std::min(zoom, maxZoom + 1));
     std::vector<Cluster*> clusters;
 
-    ClusterTree *tree = trees[z + 1];
+    ClusterTree *tree = trees[z];
     tree->kdbush->range(min_p.first, min_p.second, max_p.first, max_p.second, [&clusters, &tree](const auto id) {
         clusters.push_back(tree->clusters[id]);
     });
