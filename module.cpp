@@ -44,7 +44,44 @@ SuperCluster_dealloc(SuperClusterObject *self)
 }
 
 
+static PyObject *
+SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
+{
+    double minX, minY, maxX, maxY;
+    int zoom;
+
+    if (!PyArg_ParseTuple(args, "ddddi", &minX, &minY, &maxX, &maxY, &zoom))
+        return NULL;
+
+    std::vector<Cluster*> clusters = self->sc->getClusters(
+        std::make_pair(minX, minY),
+        std::make_pair(maxX, maxY),
+        zoom);
+
+    PyObject *xKey = PyUnicode_FromString("x");
+    PyObject *yKey = PyUnicode_FromString("y");
+    PyObject *idKey = PyUnicode_FromString("id");
+    PyObject *countKey = PyUnicode_FromString("count");
+
+    PyObject *list = PyList_New(clusters.size());
+    for (size_t i = 0; i < clusters.size(); ++i) {
+        PyObject *dict = PyDict_New();
+        Cluster *cluster = clusters[i];
+
+        PyDict_SetItem(dict, xKey, PyFloat_FromDouble(cluster->point.first));
+        PyDict_SetItem(dict, yKey, PyFloat_FromDouble(cluster->point.second));
+        PyDict_SetItem(dict, idKey, cluster->numPoints == 1 ? PyLong_FromSize_t(cluster->id) : Py_None);
+        PyDict_SetItem(dict, countKey, PyLong_FromSize_t(cluster->numPoints));
+
+        PyList_SET_ITEM(list, i, dict);
+    }
+
+    return list;
+}
+
+
 static PyMethodDef SuperCluster_methods[] = {
+    {"getClusters", (PyCFunction)SuperCluster_getClusters, METH_VARARGS, "Returns the clusters within the given bounding box at the given zoom level."},
     {NULL}
 };
 

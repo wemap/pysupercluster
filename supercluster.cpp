@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 
 #include "supercluster.hpp"
@@ -100,6 +101,20 @@ std::vector<Cluster*> SuperCluster::cluster(const std::vector<Cluster*> &points,
             clusters.push_back(p);
         }
     }
+
+    return clusters;
+}
+
+
+std::vector<Cluster*> SuperCluster::getClusters(const Point &min_p, const Point &max_p, int zoom) const
+{
+    const int z = std::max(minZoom, std::min(zoom, maxZoom));
+    std::vector<Cluster*> clusters;
+
+    ClusterTree *tree = trees[z + 1];
+    tree->kdbush->range(min_p.first, min_p.second, max_p.first, max_p.second, [&clusters, &tree](const auto id) {
+        clusters.push_back(tree->clusters[id]);
+    });
 
     return clusters;
 }

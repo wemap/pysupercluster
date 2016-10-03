@@ -27,9 +27,11 @@ public:
     SuperCluster(const std::vector<Point> &points);
     ~SuperCluster();
 
-    std::vector<Cluster*> cluster(const std::vector<Cluster*> &points, int zoom);
+    std::vector<Cluster*> getClusters(const Point &min_p, const Point &max_p, int zoom) const;
 
 private:
+    std::vector<Cluster*> cluster(const std::vector<Cluster*> &points, int zoom);
+
     const int minZoom = 0;
     const int maxZoom = 16;
     const double radius = 40;
