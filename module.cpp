@@ -1,9 +1,39 @@
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#define _USE_MATH_DEFINES
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
 
+#include <cmath>
 #include "supercluster.hpp"
+
+
+static double lngX(double lng) {
+    return lng / 360.0 + 0.5;
+}
+
+
+static double latY(double lat) {
+    if (lat <= -90)
+        return 1.0;
+    else if (lat >= 90)
+        return 0.0;
+    else {
+        double sin = std::sin(lat * M_PI / 180);
+        return 0.5 - 0.25 * std::log((1 + sin) / (1 - sin)) / M_PI;
+    }
+}
+
+
+static double xLng(double x) {
+    return (x - 0.5) * 360;
+}
+
+
+static double yLat(double y) {
+    double y2 = (180 - y * 360) * M_PI / 180;
+    return 360 * std::atan(std::exp(y2)) / M_PI - 90;
+}
 
 
 typedef struct {
@@ -28,8 +58,8 @@ SuperCluster_init(SuperClusterObject *self, PyObject *args)
     std::vector<Point> items(count);
     for (npy_intp i = 0; i < count; ++i) {
         items[i] = std::make_pair(
-            *(double*)PyArray_GETPTR2(array, i, 0),
-            *(double*)PyArray_GETPTR2(array, i, 1));
+            lngX(*(double*)PyArray_GETPTR2(array, i, 0)),
+            latY(*(double*)PyArray_GETPTR2(array, i, 1)));
     }
     self->sc = new SuperCluster(items);
 
@@ -58,8 +88,8 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
         std::make_pair(maxX, maxY),
         zoom);
 
-    PyObject *xKey = PyUnicode_FromString("x");
-    PyObject *yKey = PyUnicode_FromString("y");
+    PyObject *longitudeKey = PyUnicode_FromString("longitude");
+    PyObject *latitudeKey = PyUnicode_FromString("latitude");
     PyObject *idKey = PyUnicode_FromString("id");
     PyObject *countKey = PyUnicode_FromString("count");
 
@@ -68,8 +98,8 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
         PyObject *dict = PyDict_New();
         Cluster *cluster = clusters[i];
 
-        PyDict_SetItem(dict, xKey, PyFloat_FromDouble(cluster->point.first));
-        PyDict_SetItem(dict, yKey, PyFloat_FromDouble(cluster->point.second));
+        PyDict_SetItem(dict, longitudeKey, PyFloat_FromDouble(xLng(cluster->point.first)));
+        PyDict_SetItem(dict, latitudeKey, PyFloat_FromDouble(yLat(cluster->point.second)));
         PyDict_SetItem(dict, idKey, cluster->numPoints == 1 ? PyLong_FromSize_t(cluster->id) : Py_None);
         PyDict_SetItem(dict, countKey, PyLong_FromSize_t(cluster->numPoints));
 
