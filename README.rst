@@ -10,8 +10,9 @@ This is a port of https://github.com/mapbox/supercluster.
     >>> import numpy
     >>> import supercluster
     >>> points = numpy.array([
-    ...     (2.3522, 48.8566),
-    ...     (-0.1278, 51.5074),
+    ...     (2.3522, 48.8566),   # paris
+    ...     (-0.1278, 51.5074),  # london
+    ...     (-0.0077, 51.4826),  # greenwhich
     ... ])
     >>> index = supercluster.SuperCluster(
     ...     points,
