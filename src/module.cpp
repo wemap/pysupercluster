@@ -176,7 +176,7 @@ static PyTypeObject SuperClusterType = {
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
     "supercluster",                     /* m_name */
-    "A crazy fast geospatial point clustering module.",    /* m_doc */
+    "A fast geospatial point clustering module.",    /* m_doc */
     -1,                                 /* m_size */
     NULL,                               /* m_methods */
     NULL,                               /* m_reload */
