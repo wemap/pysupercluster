@@ -4,7 +4,7 @@ from distutils.core import setup, Extension
 extensions = [
     Extension('supercluster',
         extra_compile_args=['-std=c++1y'],
-        sources=['module.cpp', 'supercluster.cpp'],
+        sources=['src/module.cpp', 'src/supercluster.cpp'],
     )
 ]
 
