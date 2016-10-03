@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <chrono>
 
 #include "supercluster.hpp"
 
@@ -45,8 +44,6 @@ ClusterTree::~ClusterTree()
 
 SuperCluster::SuperCluster(const std::vector<Point> &points)
 {
-    auto start = std::chrono::steady_clock::now();
-
     trees.resize(maxZoom + 2);
 
     // prepare initial clusters
@@ -57,21 +54,12 @@ SuperCluster::SuperCluster(const std::vector<Point> &points)
     all_clusters = clusters;
 
     for (int z = maxZoom; z >= minZoom; --z) {
-        auto zoom_start = std::chrono::steady_clock::now();
-
         trees[z + 1] = new ClusterTree(clusters);
-
         clusters = cluster(clusters, z);
-        
-        auto elapsed = std::chrono::steady_clock::now() - zoom_start;
-        printf("z%d: %ld clusters in %ldms\n", z, clusters.size(), std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
     }
 
     // index top-level clusters
     trees[minZoom] = new ClusterTree(clusters);
-
-    auto elapsed = std::chrono::steady_clock::now() - start;
-    printf("total time: %ldms\n", std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count());
 }
 
 

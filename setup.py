@@ -9,7 +9,7 @@ extensions = [
 ]
 
 setup(name='supercluster',
-      version='0.2',
+      version='0.3',
       description='A fast geospatial point clustering module.',
       include_dirs=[numpy.get_include()],
       ext_modules=extensions)
