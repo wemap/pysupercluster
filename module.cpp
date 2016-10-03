@@ -77,15 +77,15 @@ SuperCluster_dealloc(SuperClusterObject *self)
 static PyObject *
 SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
 {
-    double minX, minY, maxX, maxY;
+    double minLng, minLat, maxLng, maxLat;
     int zoom;
 
-    if (!PyArg_ParseTuple(args, "ddddi", &minX, &minY, &maxX, &maxY, &zoom))
+    if (!PyArg_ParseTuple(args, "ddddi", &minLng, &minLat, &maxLng, &maxLat, &zoom))
         return NULL;
 
     std::vector<Cluster*> clusters = self->sc->getClusters(
-        std::make_pair(minX, minY),
-        std::make_pair(maxX, maxY),
+        std::make_pair(lngX(minLng), latY(minLat)),
+        std::make_pair(lngX(maxLng), latY(maxLat)),
         zoom);
 
     PyObject *longitudeKey = PyUnicode_FromString("longitude");
