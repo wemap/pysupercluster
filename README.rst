@@ -1,9 +1,11 @@
 supercluster
 ============
 
-A very fast Python 3 module for geospatial point clustering.
+A fast Python 3 module for geospatial point clustering.
 
-This is a port of https://github.com/mapbox/supercluster.
+This is a port of https://github.com/mapbox/supercluster to C++, conveniently
+wrapped in a Python module. Initial benchmarks show it to be an order of
+magnitude (10x) faster than the initial JavaScript implementation.
 
 .. code-block:: pycon
 
