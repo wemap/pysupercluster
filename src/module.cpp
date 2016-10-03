@@ -59,25 +59,33 @@ typedef struct {
 
 
 static int
-SuperCluster_init(SuperClusterObject *self, PyObject *args)
+SuperCluster_init(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
 {
-    PyArrayObject *array;
-    if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &array))
+    const char *kwlist[] = {"points", "min_zoom", "max_zoom", "radius", "extent", NULL};
+
+    PyArrayObject *points;
+    int min_zoom = 0;
+    int max_zoom = 16;
+    double radius = 40;
+    double extent = 512;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|iidd", const_cast<char **>(kwlist), &PyArray_Type, &points,
+                                     &min_zoom, &max_zoom, &radius, &extent))
         return -1;
 
-    if (PyArray_DESCR(array)->type_num != NPY_DOUBLE || PyArray_NDIM(array) != 2) {
+    if (PyArray_DESCR(points)->type_num != NPY_DOUBLE || PyArray_NDIM(points) != 2 || PyArray_DIMS(points)[1] != 2) {
         PyErr_SetString(PyExc_ValueError, "Array must be of type double and 2 dimensional.");
         return -1;
     }
 
-    npy_intp count = PyArray_DIMS(array)[0];
+    npy_intp count = PyArray_DIMS(points)[0];
     std::vector<Point> items(count);
     for (npy_intp i = 0; i < count; ++i) {
         items[i] = std::make_pair(
-            lngX(*(double*)PyArray_GETPTR2(array, i, 0)),
-            latY(*(double*)PyArray_GETPTR2(array, i, 1)));
+            lngX(*(double*)PyArray_GETPTR2(points, i, 0)),
+            latY(*(double*)PyArray_GETPTR2(points, i, 1)));
     }
-    self->sc = new SuperCluster(items);
+    self->sc = new SuperCluster(items, min_zoom, max_zoom, 40, 512);
 
     return 0;
 }
@@ -91,12 +99,13 @@ SuperCluster_dealloc(SuperClusterObject *self)
 
 
 static PyObject *
-SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
+SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
 {
+    const char *kwlist[] = {"top_left", "bottom_right", "zoom", NULL};
     double minLng, minLat, maxLng, maxLat;
     int zoom;
 
-    if (!PyArg_ParseTuple(args, "ddddi", &minLng, &minLat, &maxLng, &maxLat, &zoom))
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "(dd)(dd)i", const_cast<char **>(kwlist), &minLng, &minLat, &maxLng, &maxLat, &zoom))
         return NULL;
 
     std::vector<Cluster*> clusters = self->sc->getClusters(
@@ -127,7 +136,7 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args)
 
 
 static PyMethodDef SuperCluster_methods[] = {
-    {"getClusters", (PyCFunction)SuperCluster_getClusters, METH_VARARGS, "Returns the clusters within the given bounding box at the given zoom level."},
+    {"getClusters", (PyCFunction)SuperCluster_getClusters, METH_VARARGS | METH_KEYWORDS, "Returns the clusters within the given bounding box at the given zoom level."},
     {NULL}
 };
 

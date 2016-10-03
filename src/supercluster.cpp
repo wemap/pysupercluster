@@ -20,7 +20,10 @@
 
 
 Cluster::Cluster(const Point &_point, size_t _numPoints, size_t _id)
-    : point(_point), numPoints(_numPoints), id(_id), zoom(999)
+    : point(_point)
+    , numPoints(_numPoints)
+    , id(_id)
+    , zoom(999)
 {
 }
 
@@ -42,7 +45,11 @@ ClusterTree::~ClusterTree()
 }
 
 
-SuperCluster::SuperCluster(const std::vector<Point> &points)
+SuperCluster::SuperCluster(const std::vector<Point> &points, int _minZoom, int _maxZoom, double _radius, double _extent)
+    : minZoom(_minZoom)
+    , maxZoom(_maxZoom)
+    , radius(_radius)
+    , extent(_extent)
 {
     trees.resize(maxZoom + 2);
 
