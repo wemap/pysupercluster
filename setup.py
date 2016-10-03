@@ -18,7 +18,7 @@ extensions = [
 ]
 
 setup(name='supercluster',
-      version='0.4',
+      version='0.5',
       description='A fast geospatial point clustering module.',
       cmdclass={'build_ext': build_ext},
       setup_requires=['numpy >= 1.7.0'],
