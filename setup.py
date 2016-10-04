@@ -13,7 +13,14 @@ extensions = [
     Extension('supercluster',
         extra_compile_args=['-std=c++1y'],
         language='c++',
-        sources=['src/module.cpp', 'src/supercluster.cpp'],
+        depends=[
+            'src/kdbush.hpp',
+            'src/supercluster.hpp',
+        ],
+        sources=[
+            'src/module.cpp',
+            'src/supercluster.cpp',
+        ],
     )
 ]
 
