@@ -24,13 +24,23 @@ extensions = [
     )
 ]
 
-setup(name='pysupercluster',
-      version='0.5',
-      description='A fast geospatial point clustering module.',
-      author='Jeremy Lainé',
-      author_email='jeremy@getwemap.com',
-      url='https://github.com/wemap/pysupercluster',
-      cmdclass={'build_ext': build_ext},
-      setup_requires=['numpy >= 1.7.0'],
-      ext_modules=extensions,
+setup(
+    name='pysupercluster',
+    version='0.6',
+    description='A fast geospatial point clustering module.',
+    author='Jeremy Lainé',
+    author_email='jeremy@getwemap.com',
+    url='https://github.com/wemap/pysupercluster',
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: ISC License (ISCL)",
+        "Programming Language :: C++",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3 :: Only",
+        "Topic :: Scientific/Engineering :: GIS",
+    ],
+    cmdclass={'build_ext': build_ext},
+    setup_requires=['numpy >= 1.7.0'],
+    ext_modules=extensions,
 )
