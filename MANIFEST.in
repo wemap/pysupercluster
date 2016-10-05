@@ -1,2 +1,2 @@
-include LICENSE.txt
+include LICENSE.txt README.rst
 include src/*.cpp src/*.hpp
