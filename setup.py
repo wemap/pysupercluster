@@ -10,7 +10,7 @@ class build_ext(_build_ext):
         self.include_dirs.append(numpy.get_include())
 
 extensions = [
-    Extension('supercluster',
+    Extension('pysupercluster',
         extra_compile_args=['-std=c++1y'],
         language='c++',
         depends=[
@@ -24,7 +24,7 @@ extensions = [
     )
 ]
 
-setup(name='supercluster',
+setup(name='pysupercluster',
       version='0.5',
       description='A fast geospatial point clustering module.',
       author='Jeremy Lainé',

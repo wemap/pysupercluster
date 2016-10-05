@@ -1,5 +1,5 @@
 import numpy
-import supercluster
+import pysupercluster
 
 points = numpy.array([
     (2.3522, 48.8566),   # paris
@@ -7,7 +7,7 @@ points = numpy.array([
     (-0.0077, 51.4826),  # greenwhich
 ])
 
-index = supercluster.SuperCluster(
+index = pysupercluster.SuperCluster(
     points,
     min_zoom=0,
     max_zoom=16,

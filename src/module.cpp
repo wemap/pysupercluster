@@ -143,7 +143,7 @@ static PyMethodDef SuperCluster_methods[] = {
 
 static PyTypeObject SuperClusterType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "supercluster.SuperCluster",        /* tp_name */
+    "pysupercluster.SuperCluster",      /* tp_name */
     sizeof(SuperClusterObject),         /* tp_basicsize */
     0,                                  /* tp_itemsize */
     (destructor)SuperCluster_dealloc,   /* tp_dealloc */
@@ -184,7 +184,7 @@ static PyTypeObject SuperClusterType = {
 
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    "supercluster",                     /* m_name */
+    "pysupercluster",                   /* m_name */
     "A fast geospatial point clustering module.",    /* m_doc */
     -1,                                 /* m_size */
     NULL,                               /* m_methods */
@@ -196,7 +196,7 @@ static struct PyModuleDef moduledef = {
 
 
 PyMODINIT_FUNC
-PyInit_supercluster(void)
+PyInit_pysupercluster(void)
 {
     PyObject* m;
 

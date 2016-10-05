@@ -1,5 +1,5 @@
-supercluster
-============
+pysupercluster
+==============
 
 A fast Python 3 module for geospatial point clustering.
 
@@ -10,7 +10,7 @@ magnitude (10x) faster than the initial JavaScript implementation.
 .. code-block:: pycon
 
     >>> import numpy
-    >>> import supercluster
+    >>> import pysupercluster
     >>> points = numpy.array([
     ...     (2.3522, 48.8566),   # paris
     ...     (-0.1278, 51.5074),  # london
