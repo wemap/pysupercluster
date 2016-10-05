@@ -16,7 +16,7 @@ magnitude (10x) faster than the initial JavaScript implementation.
     ...     (-0.1278, 51.5074),  # london
     ...     (-0.0077, 51.4826),  # greenwhich
     ... ])
-    >>> index = supercluster.SuperCluster(
+    >>> index = pysupercluster.SuperCluster(
     ...     points,
     ...     min_zoom=0,
     ...     max_zoom=16,
