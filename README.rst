@@ -7,6 +7,16 @@ This is a port of https://github.com/mapbox/supercluster to C++, conveniently
 wrapped in a Python module. Initial benchmarks show it to be an order of
 magnitude (10x) faster than the original JavaScript implementation.
 
+Installing pysupercluster
+-------------------------
+
+The easiest way to install pysupercluster is to use pip:
+
+    pip install pysupercluster
+
+Using pysupercluster
+--------------------
+
 .. code-block:: pycon
 
     >>> import numpy
