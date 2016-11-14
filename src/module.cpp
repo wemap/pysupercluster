@@ -85,7 +85,7 @@ SuperCluster_init(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
             lngX(*(double*)PyArray_GETPTR2(points, i, 0)),
             latY(*(double*)PyArray_GETPTR2(points, i, 1)));
     }
-    self->sc = new SuperCluster(items, min_zoom, max_zoom, extent, radius);
+    self->sc = new SuperCluster(items, min_zoom, max_zoom, radius, extent);
 
     return 0;
 }
