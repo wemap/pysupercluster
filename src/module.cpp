@@ -113,20 +113,20 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         std::make_pair(lngX(maxLng), latY(maxLat)),
         zoom);
 
-    PyObject *longitudeKey = PyUnicode_FromString("longitude");
-    PyObject *latitudeKey = PyUnicode_FromString("latitude");
-    PyObject *idKey = PyUnicode_FromString("id");
     PyObject *countKey = PyUnicode_FromString("count");
+    PyObject *idKey = PyUnicode_FromString("id");
+    PyObject *latitudeKey = PyUnicode_FromString("latitude");
+    PyObject *longitudeKey = PyUnicode_FromString("longitude");
 
     PyObject *list = PyList_New(clusters.size());
     for (size_t i = 0; i < clusters.size(); ++i) {
         PyObject *dict = PyDict_New();
         Cluster *cluster = clusters[i];
 
-        PyDict_SetItem(dict, longitudeKey, PyFloat_FromDouble(xLng(cluster->point.first)));
-        PyDict_SetItem(dict, latitudeKey, PyFloat_FromDouble(yLat(cluster->point.second)));
-        PyDict_SetItem(dict, idKey, cluster->numPoints == 1 ? PyLong_FromSize_t(cluster->id) : Py_None);
         PyDict_SetItem(dict, countKey, PyLong_FromSize_t(cluster->numPoints));
+        PyDict_SetItem(dict, idKey, PyLong_FromSize_t(cluster->id));
+        PyDict_SetItem(dict, latitudeKey, PyFloat_FromDouble(yLat(cluster->point.second)));
+        PyDict_SetItem(dict, longitudeKey, PyFloat_FromDouble(xLng(cluster->point.first)));
 
         PyList_SET_ITEM(list, i, dict);
     }
