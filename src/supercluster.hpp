@@ -20,11 +20,12 @@ using Point = std::pair<double, double>;
 
 class Cluster {
 public:
-    Cluster(const Point &_point, size_t _numPoints, size_t _id);
+    Cluster(const Point &_point, size_t _numPoints, size_t _id, int _expansionZoom);
     Point point;
     size_t numPoints;
     size_t id;
     int zoom;
+    int expansionZoom;
 };
 
 

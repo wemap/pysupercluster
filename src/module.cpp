@@ -114,6 +114,7 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         zoom);
 
     PyObject *countKey = PyUnicode_FromString("count");
+    PyObject *expansionZoomKey = PyUnicode_FromString("expansion_zoom");
     PyObject *idKey = PyUnicode_FromString("id");
     PyObject *latitudeKey = PyUnicode_FromString("latitude");
     PyObject *longitudeKey = PyUnicode_FromString("longitude");
@@ -124,6 +125,7 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         Cluster *cluster = clusters[i];
 
         PyDict_SetItem(dict, countKey, PyLong_FromSize_t(cluster->numPoints));
+        PyDict_SetItem(dict, expansionZoomKey, cluster->expansionZoom >= 0 ? PyLong_FromSize_t(cluster->expansionZoom) : Py_None);
         PyDict_SetItem(dict, idKey, PyLong_FromSize_t(cluster->id));
         PyDict_SetItem(dict, latitudeKey, PyFloat_FromDouble(yLat(cluster->point.second)));
         PyDict_SetItem(dict, longitudeKey, PyFloat_FromDouble(xLng(cluster->point.first)));

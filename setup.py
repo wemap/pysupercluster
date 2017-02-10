@@ -26,7 +26,7 @@ extensions = [
 
 setup(
     name='pysupercluster',
-    version='0.7.2',
+    version='0.7.3',
     description='A fast geospatial point clustering module.',
     author='Jeremy Lainé',
     author_email='jeremy@getwemap.com',

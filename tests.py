@@ -27,11 +27,19 @@ class SuperClusterTest(unittest.TestCase):
 
         self.assertEqual(len(clusters), 2)
 
+        # single point
         self.assertEqual(clusters[0]['count'], 1)
+        self.assertEqual(clusters[0]['expansion_zoom'], None)
         self.assertEqual(clusters[0]['id'], 0)
+        self.assertAlmostEqual(clusters[0]['latitude'], 48.8566)
+        self.assertAlmostEqual(clusters[0]['longitude'], 2.3522)
 
+        # cluster
         self.assertEqual(clusters[1]['count'], 2)
+        self.assertEqual(clusters[1]['expansion_zoom'], 8)
         self.assertEqual(clusters[1]['id'], 3)
+        self.assertAlmostEqual(clusters[1]['latitude'], 51.4950017)
+        self.assertAlmostEqual(clusters[1]['longitude'], -0.0677500)
 
 
 if __name__ == '__main__':

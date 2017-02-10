@@ -19,11 +19,12 @@
 #include "supercluster.hpp"
 
 
-Cluster::Cluster(const Point &_point, size_t _numPoints, size_t _id)
+Cluster::Cluster(const Point &_point, size_t _numPoints, size_t _id, int _expansionZoom)
     : point(_point)
     , numPoints(_numPoints)
     , id(_id)
     , zoom(999)
+    , expansionZoom(_expansionZoom)
 {
 }
 
@@ -57,7 +58,7 @@ SuperCluster::SuperCluster(const std::vector<Point> &points, int _minZoom, int _
     std::vector<Cluster*> clusters;
     clusters.reserve(points.size());
     for (size_t i = 0; i < points.size(); ++i)
-        clusters.push_back(new Cluster(points[i], 1, i));
+        clusters.push_back(new Cluster(points[i], 1, i, -1));
     all_clusters = clusters;
 
     for (int z = maxZoom; z >= minZoom; --z) {
@@ -108,7 +109,7 @@ std::vector<Cluster*> SuperCluster::cluster(const std::vector<Cluster*> &points,
         });
 
         if (foundNeighbors) {
-            Cluster *cluster = new Cluster(Point(wx / numPoints, wy / numPoints), numPoints, all_clusters.size());
+            Cluster *cluster = new Cluster(Point(wx / numPoints, wy / numPoints), numPoints, all_clusters.size(), zoom + 1);
             clusters.push_back(cluster);
             all_clusters.push_back(cluster);
         } else {

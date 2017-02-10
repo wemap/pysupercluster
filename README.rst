@@ -37,6 +37,6 @@ Using pysupercluster
     ...     bottom_right=(180, -90),
     ...     zoom=4)
     [
-        {'id': 0, 'count': 1, 'latitude': 48.8566, 'longitude': 2.3522},
-        {'id': None, 'count': 2, 'latitude': 51.49500168658321, 'longitude': -0.06774999999998421}
+        {'id': 0, 'count': 1, 'expansion_zoom': None, 'latitude': 48.8566, 'longitude': 2.3522},
+        {'id': 3, 'count': 2, 'expansion_zoom': 8, 'latitude': 51.49500168658321, 'longitude': -0.06774999999998421}
     ]
