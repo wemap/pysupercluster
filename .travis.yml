@@ -1,4 +1,14 @@
 dist: trusty
 language: python
 install: pip install tox
-script: tox
+sudo: required
+script:
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
+  - tox
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-5
+    - g++-5
