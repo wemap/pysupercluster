@@ -43,6 +43,7 @@ setup(
         "Topic :: Scientific/Engineering :: GIS",
     ],
     cmdclass={'build_ext': build_ext},
-    setup_requires=['numpy >= 1.7.0'],
+    install_requires=['numpy'],
+    setup_requires=['numpy'],
     ext_modules=extensions,
 )
