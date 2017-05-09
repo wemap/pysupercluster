@@ -3,7 +3,6 @@ language: python
 install: pip install tox
 env:
   - CC=gcc-5
-  - CXX=g++-5
 script:
   - tox
 addons:
