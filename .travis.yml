@@ -1,8 +1,8 @@
 dist: trusty
 language: python
-install: pip install tox
 env:
   - CC=gcc-5
+install: pip install tox
 script:
   - tox
 addons:
