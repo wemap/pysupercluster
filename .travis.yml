@@ -1,9 +1,10 @@
 dist: trusty
 language: python
 install: pip install tox
-sudo: required
+env:
+  - CC=gcc-5
+  - CXX=g++-5
 script:
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - tox
 addons:
   apt:
