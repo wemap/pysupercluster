@@ -44,6 +44,7 @@ setup(
     ],
     cmdclass={'build_ext': build_ext},
     install_requires=['numpy'],
+    python_requires='>=3',
     setup_requires=['numpy'],
     ext_modules=extensions,
 )
