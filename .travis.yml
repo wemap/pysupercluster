@@ -1,14 +1,5 @@
 dist: trusty
 language: python
-env:
-  - CC=gcc-5
 install: pip install tox
 script:
   - tox
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-5
-    - g++-5
