@@ -1,6 +1,11 @@
 pysupercluster
 ==============
 
+|travis|
+
+.. |travis| image:: https://img.shields.io/travis/wemap/pysupercluster.svg
+    :target: https://travis-ci.org/wemap/pysupercluster
+
 A fast Python 3 module for geospatial point clustering.
 
 This is a port of https://github.com/mapbox/supercluster to C++, conveniently
