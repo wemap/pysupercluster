@@ -1,5 +1,5 @@
 dist: trusty
-install: pip install tox
+install: true
 language: python
 python: 3.5
-script: tox
+script: python setup.py test
