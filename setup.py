@@ -28,13 +28,13 @@ extensions = [
 
 setup(
     name='pysupercluster',
-    version='0.7.3',
+    version='0.7.4',
     description='A fast geospatial point clustering module.',
     author='Jeremy Lainé',
     author_email='jeremy@getwemap.com',
     url='https://github.com/wemap/pysupercluster',
     classifiers=[
-        "Development Status :: 4 - Beta",
+        'Development Status :: 5 - Production/Stable',
         "Intended Audience :: Developers",
         "License :: OSI Approved :: ISC License (ISCL)",
         "Programming Language :: C++",
