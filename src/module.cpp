@@ -119,19 +119,44 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
     PyObject *latitudeKey = PyUnicode_FromString("latitude");
     PyObject *longitudeKey = PyUnicode_FromString("longitude");
 
+    PyObject *o = NULL;
     PyObject *list = PyList_New(clusters.size());
     for (size_t i = 0; i < clusters.size(); ++i) {
         PyObject *dict = PyDict_New();
         Cluster *cluster = clusters[i];
 
-        PyDict_SetItem(dict, countKey, PyLong_FromSize_t(cluster->numPoints));
-        PyDict_SetItem(dict, expansionZoomKey, cluster->expansionZoom >= 0 ? PyLong_FromSize_t(cluster->expansionZoom) : Py_None);
-        PyDict_SetItem(dict, idKey, PyLong_FromSize_t(cluster->id));
-        PyDict_SetItem(dict, latitudeKey, PyFloat_FromDouble(yLat(cluster->point.second)));
-        PyDict_SetItem(dict, longitudeKey, PyFloat_FromDouble(xLng(cluster->point.first)));
+        o = PyLong_FromSize_t(cluster->numPoints);
+        PyDict_SetItem(dict, countKey, o);
+        Py_DECREF(o);
+
+        if (cluster->expansionZoom >= 0) {
+            o = PyLong_FromSize_t(cluster->expansionZoom);
+            PyDict_SetItem(dict, expansionZoomKey, o);
+            Py_DECREF(o);
+        } else {
+            PyDict_SetItem(dict, expansionZoomKey, Py_None);
+        }
+
+        o = PyLong_FromSize_t(cluster->id);
+        PyDict_SetItem(dict, idKey, o);
+        Py_DECREF(o);
+
+        o = PyFloat_FromDouble(yLat(cluster->point.second));
+        PyDict_SetItem(dict, latitudeKey, o);
+        Py_DECREF(o);
+
+        o = PyFloat_FromDouble(xLng(cluster->point.first));
+        PyDict_SetItem(dict, longitudeKey, o);
+        Py_DECREF(o);
 
         PyList_SET_ITEM(list, i, dict);
     }
+
+    Py_DECREF(countKey);
+    Py_DECREF(expansionZoomKey);
+    Py_DECREF(idKey);
+    Py_DECREF(latitudeKey);
+    Py_DECREF(longitudeKey);
 
     return list;
 }
