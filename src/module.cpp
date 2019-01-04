@@ -73,8 +73,8 @@ SuperCluster_init(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
                                      &min_zoom, &max_zoom, &radius, &extent))
         return -1;
 
-    if (PyArray_DESCR(points)->type_num != NPY_DOUBLE || PyArray_NDIM(points) != 2 || PyArray_DIMS(points)[1] != 2) {
-        PyErr_SetString(PyExc_ValueError, "Array must be of type double and 2 dimensional.");
+    if (PyArray_DESCR(points)->type_num != NPY_DOUBLE || PyArray_NDIM(points) != 2 || PyArray_DIMS(points)[1] != 2 || PyArray_DIMS(points)[0] == 0){
+        PyErr_SetString(PyExc_ValueError, "Array must be of type double and 2 dimensional and must have a length >= 1.");
         return -1;
     }
 
