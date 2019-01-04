@@ -41,6 +41,17 @@ class SuperClusterTest(unittest.TestCase):
         self.assertAlmostEqual(clusters[1]['latitude'], 51.4950017)
         self.assertAlmostEqual(clusters[1]['longitude'], -0.0677500)
 
+    def test_empty_input(self):
+        points = numpy.ones((0, 2))
+
+        with self.assertRaises(ValueError):
+            index = pysupercluster.SuperCluster(
+                points,
+                min_zoom=0,
+                max_zoom=16,
+                radius=40,
+                extent=512)
+
 
 if __name__ == '__main__':
     unittest.main()
