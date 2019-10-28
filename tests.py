@@ -10,11 +10,14 @@ class SuperClusterTest(unittest.TestCase):
         points = numpy.array([
             (2.3522, 48.8566),   # paris
             (-0.1278, 51.5074),  # london
-            (-0.0077, 51.4826),  # greenwhich
+            (-0.0077, 51.4826),  # greenwich
         ])
+
+        tags = ['Paris', 'London', 'Greenwich']
 
         index = pysupercluster.SuperCluster(
             points,
+            tags,
             min_zoom=0,
             max_zoom=16,
             radius=40,
@@ -33,6 +36,7 @@ class SuperClusterTest(unittest.TestCase):
         self.assertEqual(clusters[0]['id'], 0)
         self.assertAlmostEqual(clusters[0]['latitude'], 48.8566)
         self.assertAlmostEqual(clusters[0]['longitude'], 2.3522)
+        self.assertEqual(frozenset(clusters[0]['tags']), {'Paris'})
 
         # cluster
         self.assertEqual(clusters[1]['count'], 2)
@@ -40,6 +44,7 @@ class SuperClusterTest(unittest.TestCase):
         self.assertEqual(clusters[1]['id'], 3)
         self.assertAlmostEqual(clusters[1]['latitude'], 51.4950017)
         self.assertAlmostEqual(clusters[1]['longitude'], -0.0677500)
+        self.assertEqual(frozenset(clusters[1]['tags']), {'London', 'Greenwich'})
 
     def test_empty_input(self):
         points = numpy.ones((0, 2))

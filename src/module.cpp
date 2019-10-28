@@ -55,37 +55,60 @@ static double yLat(double y) {
 typedef struct {
     PyObject_HEAD
     SuperCluster *sc;
+    std::vector<void *> *itemTags;
 } SuperClusterObject;
 
 
 static int
 SuperCluster_init(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
 {
-    const char *kwlist[] = {"points", "min_zoom", "max_zoom", "radius", "extent", NULL};
+    const char *kwlist[] = {"points", "tags", "min_zoom", "max_zoom", "radius", "extent", NULL};
 
     PyArrayObject *points;
+    PyObject *tags = NULL;
     int min_zoom = 0;
     int max_zoom = 16;
     double radius = 40;
     double extent = 512;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|iidd", const_cast<char **>(kwlist), &PyArray_Type, &points,
-                                     &min_zoom, &max_zoom, &radius, &extent))
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|O!iidd", const_cast<char **>(kwlist), &PyArray_Type, &points,
+                                     &PyList_Type, &tags, &min_zoom, &max_zoom, &radius, &extent)) {
         return -1;
+    }
 
     if (PyArray_DESCR(points)->type_num != NPY_DOUBLE || PyArray_NDIM(points) != 2 || PyArray_DIMS(points)[1] != 2 || PyArray_DIMS(points)[0] == 0){
         PyErr_SetString(PyExc_ValueError, "Array must be of type double and 2 dimensional and must have a length >= 1.");
         return -1;
     }
 
-    npy_intp count = PyArray_DIMS(points)[0];
+    const npy_intp count = PyArray_DIMS(points)[0];
+
+    if (tags != NULL && PyList_Size(tags) != count) {
+        PyErr_SetString(PyExc_ValueError, "Expecting one tag per point.");
+        return -1;
+    }
+    
     std::vector<Point> items(count);
     for (npy_intp i = 0; i < count; ++i) {
         items[i] = std::make_pair(
             lngX(*(double*)PyArray_GETPTR2(points, i, 0)),
             latY(*(double*)PyArray_GETPTR2(points, i, 1)));
     }
-    self->sc = new SuperCluster(items, min_zoom, max_zoom, radius, extent);
+    
+    std::vector<void *> *itemTags = NULL;
+    if (tags) {
+        itemTags = new std::vector<void *>(count, NULL);
+        for (npy_intp i = 0; i < count; ++i) {
+            PyObject * const tag = PyList_GetItem(tags, i);
+            if (tag) {
+                Py_INCREF(tag);
+                (*itemTags)[i] = tag;
+            }
+        }
+    }
+    
+    self->sc = new SuperCluster(items, itemTags, min_zoom, max_zoom, radius, extent);
+    self->itemTags = itemTags;
 
     return 0;
 }
@@ -94,6 +117,14 @@ SuperCluster_init(SuperClusterObject *self, PyObject *args, PyObject *kwargs)
 static void
 SuperCluster_dealloc(SuperClusterObject *self)
 {
+    if (self->itemTags) {
+        for (void * const tag : *self->itemTags) {
+            if (tag) { Py_DECREF((PyObject *)tag); }
+        }
+        delete self->itemTags;
+        self->itemTags = NULL;
+    }
+    
     delete self->sc;
 }
 
@@ -114,6 +145,7 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         zoom);
 
     PyObject *countKey = PyUnicode_FromString("count");
+    PyObject *tagsKey = PyUnicode_FromString("tags");
     PyObject *expansionZoomKey = PyUnicode_FromString("expansion_zoom");
     PyObject *idKey = PyUnicode_FromString("id");
     PyObject *latitudeKey = PyUnicode_FromString("latitude");
@@ -128,6 +160,17 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         o = PyLong_FromSize_t(cluster->numPoints);
         PyDict_SetItem(dict, countKey, o);
         Py_DECREF(o);
+        
+        if (self->itemTags) {
+            const size_t tagCount = cluster->tags.size();
+            o = PyList_New(tagCount);
+            for (size_t i = 0; i < tagCount; ++i) {
+                void * const tag = cluster->tags[i];
+                PyList_SetItem(o, i, (PyObject *)tag);
+            }
+            PyDict_SetItem(dict, tagsKey, o);
+            Py_DECREF(o);
+        }
 
         if (cluster->expansionZoom >= 0) {
             o = PyLong_FromSize_t(cluster->expansionZoom);
@@ -153,6 +196,7 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
     }
 
     Py_DECREF(countKey);
+    Py_DECREF(tagsKey);
     Py_DECREF(expansionZoomKey);
     Py_DECREF(idKey);
     Py_DECREF(latitudeKey);

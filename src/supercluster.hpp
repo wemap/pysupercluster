@@ -20,9 +20,10 @@ using Point = std::pair<double, double>;
 
 class Cluster {
 public:
-    Cluster(const Point &_point, size_t _numPoints, size_t _id, int _expansionZoom);
+    Cluster(const Point &_point, size_t _numPoints, const std::vector<void *>& tags, size_t _id, int _expansionZoom);
     Point point;
     size_t numPoints;
+    std::vector<void *> tags;
     size_t id;
     int zoom;
     int expansionZoom;
@@ -41,7 +42,7 @@ public:
 
 class SuperCluster {
 public:
-    SuperCluster(const std::vector<Point> &points, int minZoom, int maxZoom, double radius, double extent);
+    SuperCluster(const std::vector<Point> &points, const std::vector<void *> * const tags, int minZoom, int maxZoom, double radius, double extent);
     ~SuperCluster();
 
     std::vector<Cluster*> getClusters(const Point &min_p, const Point &max_p, int zoom) const;
