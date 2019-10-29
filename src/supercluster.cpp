@@ -59,13 +59,13 @@ SuperCluster::SuperCluster(const std::vector<Point> &points, const std::vector<v
     std::vector<Cluster*> clusters;
     clusters.reserve(points.size());
     for (size_t i = 0; i < points.size(); ++i) {
-        
+
         std::vector<void *> clusterTags(0, NULL);
         if (tags) {
             void * const tag = (*tags)[i];
             if (tag) { clusterTags.push_back(tag); }
         }
-        
+
         clusters.push_back(new Cluster(points[i], 1, clusterTags, i, -1));
     }
     
@@ -129,7 +129,7 @@ std::vector<Cluster*> SuperCluster::cluster(const std::vector<Cluster*> &points,
             clusters.push_back(p);
         }
     }
-    
+
     return clusters;
 }
 
