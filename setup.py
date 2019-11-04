@@ -22,7 +22,7 @@ class build_ext(_build_ext):
 
 setup(
     name='pysupercluster',
-    version='0.8.1',
+    version='0.8.2',
     description='A fast geospatial point clustering module.',
     long_description=long_description,
     author='Jeremy Lainé',

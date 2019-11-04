@@ -144,6 +144,12 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
         std::make_pair(lngX(maxLng), latY(maxLat)),
         zoom);
 
+    const size_t clusterCount = clusters.size();
+    PyObject *list = PyList_New(clusterCount);
+    if (clusterCount == 0) {
+        return list;
+    }
+
     PyObject *countKey = PyUnicode_FromString("count");
     PyObject *tagsKey = PyUnicode_FromString("tags");
     PyObject *expansionZoomKey = PyUnicode_FromString("expansion_zoom");
@@ -152,21 +158,22 @@ SuperCluster_getClusters(SuperClusterObject *self, PyObject *args, PyObject *kwa
     PyObject *longitudeKey = PyUnicode_FromString("longitude");
 
     PyObject *o = NULL;
-    PyObject *list = PyList_New(clusters.size());
-    for (size_t i = 0; i < clusters.size(); ++i) {
+
+    for (size_t i = 0; i < clusterCount; ++i) {
         PyObject *dict = PyDict_New();
         Cluster *cluster = clusters[i];
 
         o = PyLong_FromSize_t(cluster->numPoints);
         PyDict_SetItem(dict, countKey, o);
         Py_DECREF(o);
-        
+
         if (self->itemTags) {
             const size_t tagCount = cluster->tags.size();
             o = PyList_New(tagCount);
             for (size_t i = 0; i < tagCount; ++i) {
-                void * const tag = cluster->tags[i];
-                PyList_SetItem(o, i, (PyObject *)tag);
+                PyObject * const tag = (PyObject *)cluster->tags[i];
+                PyList_SET_ITEM(o, i, tag);
+                Py_INCREF(tag);
             }
             PyDict_SetItem(dict, tagsKey, o);
             Py_DECREF(o);
