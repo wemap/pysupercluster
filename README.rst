@@ -1,10 +1,10 @@
 pysupercluster
 ==============
 
-|travis|
+|tests|
 
-.. |travis| image:: https://img.shields.io/travis/wemap/pysupercluster.svg
-    :target: https://travis-ci.org/wemap/pysupercluster
+.. |tests| image:: https://github.com/wemap/pysupercluster/workflows/tests/badge.svg
+    :target: https://github.com/wemap/pysupercluster/actions
 
 A fast Python 3 module for geospatial point clustering.
 
