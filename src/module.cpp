@@ -95,6 +95,7 @@ static void
 SuperCluster_dealloc(SuperClusterObject *self)
 {
     delete self->sc;
+    Py_TYPE(self)->tp_free((PyObject *) self);
 }
 
 
