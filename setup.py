@@ -14,10 +14,19 @@ with open(readme_file, encoding="utf-8") as f:
 class build_ext(_build_ext):
     def finalize_options(self):
         _build_ext.finalize_options(self)
-        # Prevent numpy from thinking it is still in its setup process:
-        __builtins__.__NUMPY_SETUP__ = False
-        import numpy
 
+        # Prevent numpy from thinking it is still in its setup process:
+        try:
+            __builtins__.__NUMPY_SETUP__ = False
+        except:
+            try:
+                # For python 3
+                import builtins
+                builtins.__NUMPY_SETUP__ = False
+            except:
+                warn("Skipping numpy hack; if installation fails, try installing numpy first")
+
+        import numpy
         self.include_dirs.append(numpy.get_include())
 
 
